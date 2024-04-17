@@ -1,7 +1,4 @@
-package com.mybatis.springminiproject.model;
-
-
-import jakarta.validation.constraints.Email;
+package com.mybatis.springminiproject.model.dto.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -11,9 +8,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Users {
-    private Integer userId;
-    private String email;
-    private String password;
-    private String profileImage;
+public class CategoriesRequest {
+
+    @NotBlank
+    @NotNull
+    private String name;
+
+    @NotBlank
+    @NotNull
+    private String description;
 }

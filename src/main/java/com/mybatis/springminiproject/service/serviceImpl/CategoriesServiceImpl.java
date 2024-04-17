@@ -6,7 +6,6 @@ import com.mybatis.springminiproject.repository.CategoriesRepository;
 import com.mybatis.springminiproject.service.CategoriesService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -17,5 +16,10 @@ public class CategoriesServiceImpl implements CategoriesService {
     public List<Categories> getAllCategories(Integer offset,Integer limit) {
         offset=(offset-1)*limit;
         return categoriesRepository.getAllCategories(offset, limit);
+    }
+
+    @Override
+    public Categories getCategoryById(Integer id) {
+        return categoriesRepository.getCategoryById(id);
     }
 }

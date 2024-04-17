@@ -1,4 +1,4 @@
-package com.mybatis.springminiproject.model.response;
+package com.mybatis.springminiproject.model.dto.response;
 
 
 import lombok.AllArgsConstructor;
