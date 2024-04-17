@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("api/v1/auths")
 public class AuthController {
     private final AppUserService appUserService;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -57,4 +57,7 @@ public class AuthController {
         AuthResponse authResponse = new AuthResponse(token);
         return ResponseEntity.ok(authResponse);
     }
+
+//    @PostMapping("/register")
+
 }

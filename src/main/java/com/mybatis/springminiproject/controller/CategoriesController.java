@@ -24,7 +24,7 @@ public class CategoriesController {
                 .message("Get all categories successfully.")
                 .payload(categoriesService.getAllCategories(offset,limit))
                 .status(HttpStatus.OK)
-                .time(LocalDateTime.now())
+                .dateTime(LocalDateTime.now())
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -35,7 +35,7 @@ public class CategoriesController {
                 .message("Get category by id successfully")
                 .payload(categoriesService.getCategoryById(id))
                 .status(HttpStatus.OK)
-                .time(LocalDateTime.now())
+                .dateTime(LocalDateTime.now())
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
