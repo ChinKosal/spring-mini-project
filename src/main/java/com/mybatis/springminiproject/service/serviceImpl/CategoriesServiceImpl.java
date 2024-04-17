@@ -20,6 +20,7 @@ public class CategoriesServiceImpl implements CategoriesService {
 
     @Override
     public Categories getCategoryById(Integer id) {
+        //Categories categories = categoriesRepository.getCategoryById(id);
         return categoriesRepository.getCategoryById(id);
     }
 }
