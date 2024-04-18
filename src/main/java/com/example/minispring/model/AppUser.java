@@ -16,10 +16,9 @@ import java.util.List;
 @NoArgsConstructor
 public class AppUser implements UserDetails {
    private Integer id;
-   private String fullName;
    private String email;
    private String password;
-   private List<String> roles;
+   private String image;
 
    @Override
    public Collection<? extends GrantedAuthority> getAuthorities() {

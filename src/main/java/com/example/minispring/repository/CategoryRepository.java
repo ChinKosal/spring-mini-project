@@ -8,10 +8,12 @@ import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.One;
 
 
 import com.example.minispring.model.Category;
 import com.example.minispring.model.Request.CategoryRequest;
+import com.example.minispring.model.Response.CategoryResponse;
 
 @Mapper
 public interface CategoryRepository {
@@ -19,8 +21,7 @@ public interface CategoryRepository {
         @Result(property = "categoryId",column = "category_id"),
         @Result(property = "categoryName",column = "name"),
         @Result(property = "categoryDescription",column = "description"),
-        @Result(property = "userId",column = "user_id")
-
+        @Result(property = "userId",column = "user_id",one = @One(select = "com.example.minispring.repository.AppUserRepository.findUserById"))
     })
     @Select("""
         select * from categories_tb inner JOIN users_tb on categories_tb.user_id =users_tb.user_id where users_tb.email = #{email}
@@ -29,7 +30,7 @@ public interface CategoryRepository {
 
     @Select("""
         select c.* from categories_tb c inner JOIN users_tb u on c.user_id =u.user_id
-        where u.email ='a@gmail.com' AND c.category_id = #{categoryId}
+        where u.email =#{email} AND c.category_id = #{categoryId}
     """)
     @ResultMap("CategoryMapper")
     Category getCategoryById(String email, Integer categoryId);
@@ -51,4 +52,12 @@ public interface CategoryRepository {
     """)
     @ResultMap("CategoryMapper")
     Category deleteCategoryById(Integer categoryId,Integer userId);
+    
+    @Select("""
+        select * from categories_tb where category_id = #{categoryId}
+    """)
+    @Result(property = "categoryId",column = "category_id")
+    @Result(property = "categoryName",column = "name")
+    @Result(property = "categoryDescription",column = "description")
+    CategoryResponse getCategoryByIdResponse(Integer categoryId);
 }

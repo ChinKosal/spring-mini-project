@@ -1,4 +1,4 @@
-package com.example.minispring.model;
+package com.example.minispring.model.Response;
 
 import com.example.minispring.model.Response.AppUserResponse;
 
@@ -10,9 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Category {
-    private String  categoryId;
+public class CategoryResponse {
+    private Integer categoryId;
     private String categoryName;
     private String categoryDescription;
-    private AppUserResponse userId;
 }

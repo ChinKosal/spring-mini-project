@@ -26,6 +26,6 @@ public class SendMailController {
         int randomNumber = (int) (Math.random() * 1000000);
         String formattedNumber = String.format("%05d", randomNumber);
         System.out.println(formattedNumber);
-        emailSenderService.sendEmail("testing011testing@gmail.com","Testing","Testing");
+        emailSenderService.sendEmail("nangapple82@gmail.com","Testing","Testing");
     }
 }
