@@ -4,6 +4,7 @@ import com.mybatis.springminiproject.jwt.JwtService;
 import com.mybatis.springminiproject.model.dto.request.AuthRequest;
 import com.mybatis.springminiproject.model.dto.response.AuthResponse;
 import com.mybatis.springminiproject.service.AppUserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.apache.coyote.BadRequestException;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("api/v1/auths")
+@SecurityRequirement(name = "bearerAuth")
 public class AuthController {
     private final AppUserService appUserService;
     private final BCryptPasswordEncoder passwordEncoder;

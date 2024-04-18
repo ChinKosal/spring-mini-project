@@ -7,27 +7,21 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class AppUser implements UserDetails {
     private Integer id;
-    private String fullName;
     private String email;
     private String password;
-    private List<String> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        for(String role : roles){
-            authorities.add(new SimpleGrantedAuthority(role));
-        }
-        return authorities;
+//        return Collections.singleton(new SimpleGrantedAuthority("ROLE USER"));
+        return null;
     }
 
     @Override
