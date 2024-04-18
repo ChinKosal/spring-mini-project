@@ -34,7 +34,7 @@ public class FileController {
                     .message(fileResponse.getFileName().equals("Upload Failed")? "Upload Fail" :"successfully uploaded file")
                     .payload(fileResponse)
                     .httpStatus(HttpStatus.OK)
-                    .dateFormat(LocalDateTime.now()).build());
+                    .localDateTime(LocalDateTime.now()).build());
        return ResponseEntity.ok(response);
    }
     @GetMapping

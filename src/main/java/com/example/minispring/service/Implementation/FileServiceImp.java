@@ -1,4 +1,4 @@
-package com.example.minispring.service;
+package com.example.minispring.service.Implementation;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,6 +11,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.example.minispring.service.FileService;
 
 @Service
 public class FileServiceImp implements FileService{

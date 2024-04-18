@@ -26,8 +26,8 @@ public class GlobalValidation {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ProblemDetail handleMethodArgumentNotValidException(MethodArgumentNotValidException ex){
         Map<String,String> error = new HashMap<>();
-        for(var fielderror: ex.getBindingResult().getFieldErrors()){
-            error.put(fielderror.getField(), fielderror.getDefaultMessage());
+        for(var fieldError: ex.getBindingResult().getFieldErrors()){
+            error.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
         problemDetail.setTitle("Bad Request");
