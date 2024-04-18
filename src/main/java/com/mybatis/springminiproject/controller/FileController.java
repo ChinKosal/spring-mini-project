@@ -1,3 +1,4 @@
+
 package com.mybatis.springminiproject.controller;
 import com.mybatis.springminiproject.model.File;
 import com.mybatis.springminiproject.model.dto.response.ApiResponse;
@@ -47,4 +48,3 @@ public class FileController {
                 .contentType(mediaType).body(resource);
     }
 }
-
