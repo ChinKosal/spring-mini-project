@@ -15,13 +15,12 @@ import java.util.Collections;
 @NoArgsConstructor
 public class AppUser implements UserDetails {
     private Integer id;
-    private String fullName;
     private String email;
     private String password;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
+        return Collections.singleton(new SimpleGrantedAuthority("ROLE USER"));
     }
 
     @Override
