@@ -8,6 +8,8 @@ import com.example.minispring.model.Request.CategoryRequest;
 import com.example.minispring.service.CategoryService;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -48,10 +50,10 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Category>> getCategoryById(@PathVariable Integer id) {
+    public ResponseEntity<ApiResponse<Category>> getCategoryById(@PathVariable @Positive Integer id) {
         Category category = categoryService.getCategoryById(AuthController.getUsernameOfCurrentUser(),id);
         ApiResponse<Category> response = ApiResponse.<Category>builder()
-            .message(category!=null?"Get All Categories Successfully":"No Data Available")
+            .message(category!=null?"Category with Id " +id+ " is founded":"No Data Available")
             .payload(category)
             .httpStatus(HttpStatus.OK)
             .localDateTime(LocalDateTime.now()).build();
@@ -59,10 +61,10 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Category>> addNewCategory(@RequestBody CategoryRequest categoryRequest) {
+    public ResponseEntity<ApiResponse<Category>> addNewCategory(@RequestBody @Valid CategoryRequest categoryRequest) {
         Category category = categoryService.addNewCategory(categoryRequest);
         ApiResponse<Category> response = ApiResponse.<Category>builder()
-            .message(category!=null?"Get All Categories Successfully":"No Data Available")
+            .message(category!=null?"New Category has been add Successfully":"No Data Available")
             .payload(category)
             .httpStatus(HttpStatus.OK)
             .localDateTime(LocalDateTime.now()).build();
@@ -70,10 +72,10 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<Category>> updateCategoryById(@RequestBody CategoryRequest categoryRequest, @PathVariable Integer id) {
+    public ResponseEntity<ApiResponse<Category>> updateCategoryById(@RequestBody @Valid CategoryRequest categoryRequest, @PathVariable @Positive Integer id) {
         Category category = categoryService.updateCategoryById(categoryRequest,id);
         ApiResponse<Category> response = ApiResponse.<Category>builder()
-            .message(category!=null?"Get All Categories Successfully":"No Data Available")
+            .message(category!=null?"Category with ID "+id+" has been update Successfully.":"No Data Available")
             .payload(category)
             .httpStatus(HttpStatus.OK)
             .localDateTime(LocalDateTime.now()).build();
@@ -81,10 +83,10 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Category>> deleteCategoryById(@PathVariable Integer id) {
+    public ResponseEntity<ApiResponse<Category>> deleteCategoryById(@PathVariable @Positive Integer id) {
         Category category = categoryService.deleteCategoryById(id);
         ApiResponse<Category> response = ApiResponse.<Category>builder()
-            .message(category!=null?"Delete Categories Successfully":"No Data Available")
+            .message(category!=null?"Categories with ID "+id+" has been deleted Successfully":"No Data Available")
             .payload(null)
             .httpStatus(HttpStatus.OK)
             .localDateTime(LocalDateTime.now()).build();

@@ -8,6 +8,8 @@ import com.example.minispring.model.Request.ExpenseRequest;
 import com.example.minispring.service.ExpenseService;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,7 +43,7 @@ public class ExpenseController {
     public ResponseEntity<ApiResponse<List<Expense>>> getAllExpense() {
         List<Expense> expenses = expenseService.getAllExpense();
         ApiResponse<List<Expense>> response = ApiResponse.<List<Expense>>builder()
-            .message(expenses!=null?"Get All Categories Successfully":"No Data Available")
+            .message(expenses!=null?"Get All Expense Successfully":"No Data Available")
             .payload(expenses)
             .httpStatus(HttpStatus.OK)
             .localDateTime(LocalDateTime.now()).build();
@@ -49,10 +51,10 @@ public class ExpenseController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Expense>> getExpenseById(@PathVariable Integer id){
+    public ResponseEntity<ApiResponse<Expense>> getExpenseById(@PathVariable @Positive Integer id){
         Expense expense = expenseService.getExpenseById(id);
         ApiResponse<Expense> response = ApiResponse.<Expense>builder()
-            .message(expense!=null?"Get All Categories Successfully":"No Data Available")
+            .message(expense!=null?"Expense with Id "+id+" is founded":"No Data Available")
             .payload(expense)
             .httpStatus(HttpStatus.OK)
             .localDateTime(LocalDateTime.now()).build();
@@ -60,10 +62,10 @@ public class ExpenseController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Expense>> addNewExpense(@RequestBody ExpenseRequest expenseRequest){
+    public ResponseEntity<ApiResponse<Expense>> addNewExpense(@RequestBody @Valid ExpenseRequest expenseRequest){
         Expense expense = expenseService.addNewExpense(expenseRequest);
         ApiResponse<Expense> response = ApiResponse.<Expense>builder()
-            .message(expense!=null?"Get All Categories Successfully":"No Data Available")
+            .message(expense!=null?"New Expense has been add Successfully":"No Data Available")
             .payload(expense)
             .httpStatus(HttpStatus.OK)
             .localDateTime(LocalDateTime.now()).build();
@@ -71,10 +73,10 @@ public class ExpenseController {
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<Expense>> updateExpenseById(@RequestBody ExpenseRequest expenseRequest,@PathVariable Integer id){
+    public ResponseEntity<ApiResponse<Expense>> updateExpenseById(@RequestBody @Valid ExpenseRequest expenseRequest,@PathVariable @Positive Integer id){
         Expense expense = expenseService.updateExpense(expenseRequest,id);
         ApiResponse<Expense> response = ApiResponse.<Expense>builder()
-            .message(expense!=null?"Get All Categories Successfully":"No Data Available")
+            .message(expense!=null?"Expense with id "+id+" has been update Successfully":"No Data Available")
             .payload(expense)
             .httpStatus(HttpStatus.OK)
             .localDateTime(LocalDateTime.now()).build();
@@ -82,11 +84,11 @@ public class ExpenseController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Expense>> deleteExpense(@PathVariable Integer id){
+    public ResponseEntity<ApiResponse<Expense>> deleteExpense(@PathVariable @Positive Integer id){
         Expense expense = expenseService.deleteExpense(id);
         ApiResponse<Expense> response = ApiResponse.<Expense>builder()
-            .message(expense!=null?"Get All Categories Successfully":"No Data Available")
-            .payload(expense)
+            .message(expense!=null?"Category with id "+id+" has been delete Successfully.":"No Data Available")
+            .payload(null)
             .httpStatus(HttpStatus.OK)
             .localDateTime(LocalDateTime.now()).build();
         return ResponseEntity.status(HttpStatus.OK).body(response);

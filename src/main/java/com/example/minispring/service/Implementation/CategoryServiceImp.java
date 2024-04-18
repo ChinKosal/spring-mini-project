@@ -11,6 +11,7 @@ import com.example.minispring.model.Request.CategoryRequest;
 import com.example.minispring.repository.AppUserRepository;
 import com.example.minispring.repository.CategoryRepository;
 import com.example.minispring.service.CategoryService;
+import com.example.minispring.validation.NotFound;
 @Service
 public class CategoryServiceImp implements CategoryService{
     private final CategoryRepository categoryRepository;
@@ -22,7 +23,7 @@ public class CategoryServiceImp implements CategoryService{
     @Override
     public List<Category> getAllCategory(String email) {
         List<Category> category = categoryRepository.getAllCategory(email);
-        if(category == null){
+        if(category.isEmpty()){
             return null;
         }
         return category;
@@ -31,7 +32,7 @@ public class CategoryServiceImp implements CategoryService{
     public Category getCategoryById(String email, Integer categoryId){
         Category category = categoryRepository.getCategoryById(email,categoryId);
         if(category == null){
-            return null;
+            throw new NotFound("Category with ID " +categoryId +" not found");
         }
         return category;
     }
@@ -49,6 +50,9 @@ public class CategoryServiceImp implements CategoryService{
         String email = AuthController.getUsernameOfCurrentUser();
         AppUser userId = appUserRepository.findByEmail(email);
         Category category = categoryRepository.updateCategoryById(categoryRequest, categoryId, userId.getId());
+        if(category==null){
+            throw new NotFound("Category with ID " +categoryId +" not found");
+        }
         return category;
     }
 
@@ -57,6 +61,9 @@ public class CategoryServiceImp implements CategoryService{
         String email = AuthController.getUsernameOfCurrentUser();
         AppUser userId = appUserRepository.findByEmail(email);
         Category category = categoryRepository.deleteCategoryById(categoryId, userId.getId());
+        if(category==null){
+            throw new NotFound("Category with ID " +categoryId +" not found");
+        }
         return category;
     }
 }
