@@ -3,6 +3,7 @@ import com.mybatis.springminiproject.model.Categories;
 import com.mybatis.springminiproject.model.dto.request.CategoriesRequest;
 import com.mybatis.springminiproject.model.dto.response.ApiResponse;
 import com.mybatis.springminiproject.service.CategoriesService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/categories")
 @AllArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
 public class CategoriesController {
     private final CategoriesService categoriesService;
     @GetMapping

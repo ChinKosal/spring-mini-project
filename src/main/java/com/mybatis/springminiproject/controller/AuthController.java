@@ -8,14 +8,12 @@ import com.mybatis.springminiproject.model.dto.response.ApiResponse;
 import com.mybatis.springminiproject.model.dto.response.AuthResponse;
 import com.mybatis.springminiproject.service.AppUserService;
 import org.apache.coyote.BadRequestException;
-import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +25,7 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("api/v1/auths")
+//@SecurityRequirement(name = "bearerAuth")
 public class AuthController {
     private final AppUserService appUserService;
     private final BCryptPasswordEncoder passwordEncoder;

@@ -23,7 +23,7 @@ create table opts_tb(
                         issued_at TIMESTAMP DEFAULT LOCALTIMESTAMP,
                         expiration TIMESTAMP,
                         verify BOOLEAN,
-                        user_id SERIAL,
+                        user_id Int,
                         CONSTRAINT fk_opts_users_id_tb FOREIGN KEY (user_id) REFERENCES users_tb(user_id) on DELETE CASCADE on UPDATE CASCADE
 );
 INSERT INTO opts_tb (opt_name, issued_at, expiration, verify, user_id)
@@ -36,7 +36,7 @@ create table categories_tb(
                               category_id SERIAL PRIMARY KEY,
                               name VARCHAR(255),
                               description VARCHAR(255),
-                              user_id SERIAL,
+                              user_id Int,
                               CONSTRAINT fk_categories_users_id_tb FOREIGN KEY (user_id) REFERENCES users_tb(user_id) on DELETE CASCADE ON UPDATE CASCADE
 );
 INSERT INTO categories_tb (name, description, user_id)
@@ -50,8 +50,8 @@ CREATE Table expenses_tb(
                             amount NUMERIC(10,2),
                             description VARCHAR(255),
                             date TIMESTAMP DEFAULT LOCALTIMESTAMP,
-                            user_id SERIAL,
-                            category_id SERIAL,
+                            user_id Int,
+                            category_id Int,
                             CONSTRAINT fk_expenses_users_id_tb FOREIGN KEY (user_id) REFERENCES users_tb(user_id) ON DELETE CASCADE ON UPDATE CASCADE,
                             CONSTRAINT fk_expenses_categories_id_tb FOREIGN KEY (category_id) REFERENCES categories_tb(category_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
