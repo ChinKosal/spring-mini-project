@@ -27,25 +27,19 @@ public class EmailingServiceImp implements EmailingService{
     private String fromMail;
 
     @Async
-    public void sendMail(MailRequest request) throws MessagingException {
+    public void sendMail(String email,String subject,String formattedNumber) throws MessagingException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
 
         mimeMessageHelper.setFrom(fromMail);
-        mimeMessageHelper.setTo(request.getToEmail());
-        mimeMessageHelper.setSubject(request.getSubject());
+        mimeMessageHelper.setTo(email);
+        mimeMessageHelper.setSubject(subject);
 
-        if(request.isHTML()) {
-            Context context = new Context();
-            int randomNumber = (int) (Math.random() * 1000000);
-            String formattedNumber = String.format("%06d", randomNumber);
-            context.setVariable("optscode", formattedNumber);
-            String processedString = templateEngine.process("template", context);
+        Context context = new Context();
+        context.setVariable("optscode", formattedNumber);
+        String processedString = templateEngine.process("template", context);
             
-            mimeMessageHelper.setText(processedString, true);
-        } else {
-            //mimeMessageHelper.setText(request.getMessage(), false);
-        }
+        mimeMessageHelper.setText(processedString, true);
 
         mailSender.send(mimeMessage);
     }

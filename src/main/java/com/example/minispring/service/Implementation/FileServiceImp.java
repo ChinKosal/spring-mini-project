@@ -41,6 +41,7 @@ public class FileServiceImp implements FileService{
    public Resource getFileByFileName(String fileName) throws IOException {
       //get file path
       Path path = Paths.get("src/main/resources/images/" + fileName);
+      System.out.println(path);
       //read file as byte
       return new ByteArrayResource(Files.readAllBytes(path));
    }

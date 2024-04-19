@@ -1,7 +1,5 @@
 package com.example.minispring.model.Response;
 
-import com.example.minispring.model.Response.AppUserResponse;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
