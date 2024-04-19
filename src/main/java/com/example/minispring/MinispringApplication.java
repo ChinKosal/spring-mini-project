@@ -1,13 +1,12 @@
-package com.mybatis.springminiproject;
+package com.example.minispring;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SpringMiniProjectApplication {
-
+public class MinispringApplication {
     public static void main(String[] args) {
-        SpringApplication.run(SpringMiniProjectApplication.class, args);
+        SpringApplication.run(MinispringApplication.class, args);
     }
 
 }
