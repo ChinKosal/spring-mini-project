@@ -18,5 +18,6 @@ public class AuthRequest {
    private String email;
    @NotBlank
    @NotNull
+   @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z0-9\\d]{8,}$")
    private String password;
 }

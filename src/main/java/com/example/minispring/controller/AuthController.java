@@ -70,16 +70,14 @@ public class AuthController {
     private void authenticate(String username, String password) throws Exception {
     try {
        UserDetails userApp = appUserService.loadUserByUsername(username);
+       System.out.println(userApp);
        if (userApp == null){throw new BadRequestException("Wrong Email");}
        if (!passwordEncoder.matches(password, userApp.getPassword())){
-           throw new BadRequestException("Wrong Password");}
+           throw new NotFound("Wrong Password");}
        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
     } catch (DisabledException e) {
        throw new Exception("USER_DISABLED", e);} catch (BadCredentialsException e) {
        throw new Exception("INVALID_CREDENTIALS", e);
-        }
-        catch(Exception a){
-            throw new NotFound("Wrong password");
         }
     }
 
@@ -132,7 +130,6 @@ public class AuthController {
     @PutMapping("/verify")
     public ResponseEntity<?> verifyEmail(@RequestParam @Positive String optCode) {
         String result = optsService.confirmOptCode(optCode);
-        System.out.println(result);
         return ResponseEntity.status(HttpStatus.OK).body(result.equals("wrong")?"Wrong OptCode":result.equals("expired")?"Code Expired":"Email Register Successfully.");
     }
 
