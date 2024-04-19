@@ -24,8 +24,9 @@ public class FileServiceImp implements FileService{
       // cute-cat.png => [cute-cat, png]
       assert fileName != null;
       if (file.getOriginalFilename().contains(".gif") 
-            || file.getOriginalFilename().contains(".jfif")
-            || file.getOriginalFilename().contains(".jpg")){
+            || file.getOriginalFilename().contains(".jpg")
+            || file.getOriginalFilename().contains(".png")
+            || file.getOriginalFilename().contains(".jpeg")){
            // convert file name to uuid format form
          fileName = UUID.randomUUID()+ "." + StringUtils.getFilenameExtension(fileName);
          // if the folder not exist create one
