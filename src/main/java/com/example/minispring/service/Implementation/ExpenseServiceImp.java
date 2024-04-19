@@ -26,10 +26,20 @@ public class ExpenseServiceImp implements ExpenseService{
     }
 
     @Override
-    public List<Expense> getAllExpense() {
+    public List<Expense> getAllExpense(Integer offset,Integer limit,String sortBy,boolean orderBy) {
+        System.out.println(sortBy);
+        System.out.println(orderBy);
+        offset = (offset-1) * limit;
+        String order = "";
+        if(orderBy==true) {
+            order = "DESC";
+        }else{
+            order="ASC";
+        }
         String email = AuthController.getUsernameOfCurrentUser();
         AppUser userId = appUserRepository.findByEmail(email);
-        List<Expense> expense = expenseRepository.getAllExpense(userId.getId());
+        System.out.println(sortBy+order);
+        List<Expense> expense = expenseRepository.getAllExpense(userId.getId(), offset, limit,sortBy,order);
         if(expense.isEmpty()){
             return null;
         }

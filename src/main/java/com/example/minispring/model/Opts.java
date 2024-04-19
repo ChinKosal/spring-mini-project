@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class Opts {
-    private Integer optId;
+    private Integer optId;  
     private String optCode;
     private LocalDateTime issuedAt;
     private LocalDateTime expiredAt;
