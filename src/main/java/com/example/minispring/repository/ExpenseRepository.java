@@ -20,9 +20,13 @@ public interface ExpenseRepository {
         @Result(property = "userId",column = "user_id",one = @One(select = "com.example.minispring.repository.AppUserRepository.findUserById"))
     })
     @Select("""
-            SELECT * FROM expenses_tb WHERE user_id = #{userId}
+        SELECT * FROM expenses_tb
+        WHERE user_id = #{userId}
+        ORDER BY ${sortBy} ${orderBy}
+        LIMIT #{limit} OFFSET #{offset}
     """)
-    List<Expense> getAllExpense(Integer userId);
+    List<Expense> getAllExpense(Integer userId, Integer offset, Integer limit, String sortBy, String orderBy);
+    
 
     @Select("""
             select * from expenses_tb WHERE expense_id = #{expenseId} AND user_id = #{userId};

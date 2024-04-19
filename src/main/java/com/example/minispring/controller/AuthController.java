@@ -21,17 +21,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.minispring.jwt.JwtService;
 import com.example.minispring.model.AppUser;
+import com.example.minispring.model.Opts;
 import com.example.minispring.model.Request.AppUserRequest;
 import com.example.minispring.model.Request.AppUserRequestPassword;
 import com.example.minispring.model.Request.AuthRequest;
 import com.example.minispring.model.Response.AuthResponse;
 import com.example.minispring.repository.AppUserRepository;
+import com.example.minispring.repository.OptsRepository;
 import com.example.minispring.service.AppUserService;
 import com.example.minispring.service.EmailingService;
 import com.example.minispring.service.FileService;
 import com.example.minispring.service.OptsService;
+import com.example.minispring.validation.NotFound;
 
 import jakarta.mail.MessagingException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Positive;
+
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -47,8 +54,9 @@ public class AuthController {
     private final EmailingService emailingService;
     private final AppUserRepository appUserRepository;
     private final OptsService optsService;
+    private final OptsRepository optsRepository;
 
-    public AuthController(AppUserService appUserService, BCryptPasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService,FileService fileService,EmailingService emailingService,AppUserRepository appUserRepository,OptsService optsService) {
+    public AuthController(AppUserService appUserService, BCryptPasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService,FileService fileService,EmailingService emailingService,AppUserRepository appUserRepository,OptsService optsService,OptsRepository optsRepository) {
         this.appUserService = appUserService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
@@ -57,13 +65,15 @@ public class AuthController {
         this.emailingService = emailingService;
         this.appUserRepository=appUserRepository;
         this.optsService=optsService;
+        this.optsRepository=optsRepository;
     }
     private void authenticate(String username, String password) throws Exception {
     try {
        UserDetails userApp = appUserService.loadUserByUsername(username);
+       System.out.println(userApp);
        if (userApp == null){throw new BadRequestException("Wrong Email");}
        if (!passwordEncoder.matches(password, userApp.getPassword())){
-           throw new BadRequestException("Wrong Password");}
+           throw new NotFound("Wrong Password");}
        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
     } catch (DisabledException e) {
        throw new Exception("USER_DISABLED", e);} catch (BadCredentialsException e) {
@@ -72,7 +82,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticate(@RequestBody AuthRequest authRequest) throws Exception {
+    public ResponseEntity<?> authenticate(@RequestBody @Valid AuthRequest authRequest) throws Exception {
        authenticate(authRequest.getEmail(), authRequest.getPassword());
        final UserDetails userDetails = appUserService.loadUserByUsername(authRequest.getEmail());
        final String token = jwtService.generateToken(userDetails);
@@ -89,7 +99,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody AppUserRequest appUserRequest){
+    public ResponseEntity<?> register(@RequestBody @Valid AppUserRequest appUserRequest){
         boolean check = true;
         if(!appUserRequest.getPassword().equals(appUserRequest.getConfirmPassword())){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Passwords do not match");
@@ -118,14 +128,19 @@ public class AuthController {
     }
 
     @PutMapping("/verify")
-    public ResponseEntity<?> verifyEmail(@RequestParam String optCode) {
-        ResponseEntity<?> result = optsService.confirmOptCode(optCode);
-        return ResponseEntity.status(HttpStatus.OK).body("Email Register Successfully.");
+    public ResponseEntity<?> verifyEmail(@RequestParam @Positive String optCode) {
+        String result = optsService.confirmOptCode(optCode);
+        return ResponseEntity.status(HttpStatus.OK).body(result.equals("wrong")?"Wrong OptCode":result.equals("expired")?"Code Expired":"Email Register Successfully.");
     }
 
     @PutMapping("resend")
-    public ResponseEntity<?> resendOpts(@RequestParam String email) {
+    public ResponseEntity<?> resendOpts(@RequestParam @Email String email) {
         appUserService.resendOtpCheckMail(email);
+        AppUser userId = appUserRepository.findByEmail(email);
+        Opts opt = optsRepository.checkUserId(userId.getId());
+        if(opt.getVerify()==true){
+            throw new NotFound("Your Account already verify");
+        }
         optsService.deleteOptCode(email);
         int randomNumber = (int) (Math.random() * 1000000);
         String formattedNumber = String.format("%06d", randomNumber);
@@ -134,15 +149,14 @@ public class AuthController {
         } catch (MessagingException e) {
             System.out.println("Error sending email: " + e.getMessage());
         }
-        AppUser userId = appUserRepository.findByEmail(email);
         optsService.insertOpt(formattedNumber, false, userId.getId());
 
         return ResponseEntity.status(HttpStatus.OK).body("New Otp has been send");
     }
 
     @PutMapping("forget")
-    public ResponseEntity<?> forgetPassword(@RequestParam String email, @RequestBody AppUserRequestPassword appUserRequestPassword) {
-        appUserService.resendOtpCheckMail(email);
+    public ResponseEntity<?> forgetPassword(@RequestParam @Email String email, @RequestBody @Valid AppUserRequestPassword appUserRequestPassword) {
+        appUserService.loadUserByUsername(email);
         if(!appUserRequestPassword.getPassword().equals(appUserRequestPassword.getConfirmPassword())){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Passwords do not match");
         }

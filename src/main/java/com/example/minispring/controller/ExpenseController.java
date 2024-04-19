@@ -20,12 +20,10 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
-
-
-
 
 @RestController
 @RequestMapping("/api/v1/expenses")
@@ -38,8 +36,9 @@ public class ExpenseController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Expense>>> getAllExpense() {
-        List<Expense> expenses = expenseService.getAllExpense();
+    public ResponseEntity<ApiResponse<List<Expense>>> getAllExpense(
+        @RequestParam(defaultValue = "1") @Positive Integer offset,@RequestParam(defaultValue = "3") @Positive Integer limit,@RequestParam(defaultValue = "expense_id") String sortBy,@RequestParam(defaultValue = "false") boolean orderBy) {
+        List<Expense> expenses = expenseService.getAllExpense(offset, limit,sortBy,orderBy);
         ApiResponse<List<Expense>> response = ApiResponse.<List<Expense>>builder()
             .message(expenses!=null?"Get All Expense Successfully":"No Data Available")
             .payload(expenses)

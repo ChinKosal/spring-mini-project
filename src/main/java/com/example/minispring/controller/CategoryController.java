@@ -20,13 +20,10 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
-
-
-
-
 
 @RestController
 @RequestMapping("/api/v1/categories")
@@ -38,8 +35,8 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Category>>> getAllCategory() {
-        List<Category> category = categoryService.getAllCategory(AuthController.getUsernameOfCurrentUser());
+    public ResponseEntity<ApiResponse<List<Category>>> getAllCategory(@RequestParam(defaultValue = "1") @Positive Integer offset,@RequestParam(defaultValue = "3") @Positive Integer limit) {
+        List<Category> category = categoryService.getAllCategory(AuthController.getUsernameOfCurrentUser(),offset,limit);
         ApiResponse<List<Category>> response = ApiResponse.<List<Category>>builder()
             .message(category!=null?"Get All Categories Successfully":"No Data Available")
             .payload(category)

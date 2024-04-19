@@ -24,9 +24,9 @@ public interface CategoryRepository {
         @Result(property = "userId",column = "user_id",one = @One(select = "com.example.minispring.repository.AppUserRepository.findUserById"))
     })
     @Select("""
-        select * from categories_tb inner JOIN users_tb on categories_tb.user_id =users_tb.user_id where users_tb.email = #{email}
+        select * from categories_tb inner JOIN users_tb on categories_tb.user_id =users_tb.user_id where users_tb.email = #{email} order by categories_tb.category_id asc limit #{limit} offset #{offset}
     """)
-    List<Category> getAllCategory(String email);
+    List<Category> getAllCategory(String email,Integer offset,Integer limit);
 
     @Select("""
         select c.* from categories_tb c inner JOIN users_tb u on c.user_id =u.user_id

@@ -21,8 +21,9 @@ public class CategoryServiceImp implements CategoryService{
         this.appUserRepository = appUserRepository;
     }
     @Override
-    public List<Category> getAllCategory(String email) {
-        List<Category> category = categoryRepository.getAllCategory(email);
+    public List<Category> getAllCategory(String email,Integer offset,Integer limit) {
+        offset = (offset-1) * limit;
+        List<Category> category = categoryRepository.getAllCategory(email,offset, limit);
         if(category.isEmpty()){
             return null;
         }

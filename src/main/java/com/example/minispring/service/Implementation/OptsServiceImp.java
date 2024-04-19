@@ -25,23 +25,23 @@ public class OptsServiceImp implements OptsService {
     @Override
     public void insertOpt(String optCode, Boolean verify, Integer userId) {
         LocalDateTime issued = LocalDateTime.now();
-        LocalDateTime expiration = issued.plus(5, ChronoUnit.MINUTES);
+        LocalDateTime expiration = issued.plus(1, ChronoUnit.MINUTES);
         optsRepository.insertOpt(optCode,issued, expiration, verify, userId);
     }
     @Override
-    public ResponseEntity<?> confirmOptCode(String optCode) {
+    public String confirmOptCode(String optCode) {
         Opts opt = optsRepository.confirmOptCode(optCode);
         System.out.println(opt);
         if(opt == null){
-            return ResponseEntity.status(HttpStatus.OK).body("wrong");
+            return "wrong";
         }
         if(opt.getExpiredAt().isBefore(LocalDateTime.now())){
-            return ResponseEntity.status(HttpStatus.OK).body("expired");
+            return "expired";
         }
         if(opt.getVerify()==false){
             optsRepository.confirmVerifyOptCode(optCode);
         }
-        return ResponseEntity.status(HttpStatus.OK).body("");
+        return "success";
     }
 
     @Override
