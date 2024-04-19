@@ -34,7 +34,7 @@ public class SecurityConfig {
                .authorizeHttpRequests(request -> request
                        .requestMatchers("/auth/**","/v3/api-docs/**",
                                "/swagger-ui/**",
-                               "/swagger-ui.html","/mail"
+                               "/swagger-ui.html","/mail","/sendmail","/api/v1/mail","emailing-controller/sendMail"
                        ).permitAll()
                        .anyRequest().authenticated())
                .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthEntrypoint))
