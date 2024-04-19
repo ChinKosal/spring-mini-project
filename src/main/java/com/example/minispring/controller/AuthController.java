@@ -142,6 +142,7 @@ public class AuthController {
 
     @PutMapping("forget")
     public ResponseEntity<?> forgetPassword(@RequestParam String email, @RequestBody AppUserRequestPassword appUserRequestPassword) {
+        appUserService.resendOtpCheckMail(email);
         if(!appUserRequestPassword.getPassword().equals(appUserRequestPassword.getConfirmPassword())){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Passwords do not match");
         }
