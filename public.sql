@@ -1,4 +1,4 @@
-    -- Active: 1707989179952@@127.0.0.1@5432@expense_tracking_db@public
+-- Active: 1707989179952@@127.0.0.1@5432@expense_tracking_db@public
     create DATABASE expense_tracking_db;
 
     drop Table opts_tb;
@@ -58,12 +58,7 @@
 
                     update opts_tb set verify = true where opt_code = '659010' order by expiration desc limit 1
 
-
-
-                    UPDATE opts_tb
-    SET verify = true
-    WHERE opt_code = '659010' (ORDER BY expiration desc limit 1;)
-
-
-
     delete from opts_tb where user_id = 31;
+
+
+    SELECT * FROM expenses_tb WHERE user_id = 34 order by expense_id asc limit 3 offset 1

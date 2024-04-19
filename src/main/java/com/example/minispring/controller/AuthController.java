@@ -78,10 +78,13 @@ public class AuthController {
        throw new Exception("USER_DISABLED", e);} catch (BadCredentialsException e) {
        throw new Exception("INVALID_CREDENTIALS", e);
         }
+        catch(Exception a){
+            throw new NotFound("Wrong password");
+        }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticate(@RequestBody AuthRequest authRequest) throws Exception {
+    public ResponseEntity<?> authenticate(@RequestBody @Valid AuthRequest authRequest) throws Exception {
        authenticate(authRequest.getEmail(), authRequest.getPassword());
        final UserDetails userDetails = appUserService.loadUserByUsername(authRequest.getEmail());
        final String token = jwtService.generateToken(userDetails);
