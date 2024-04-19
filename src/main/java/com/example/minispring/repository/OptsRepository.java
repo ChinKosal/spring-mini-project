@@ -41,4 +41,10 @@ public interface OptsRepository {
     """)
     @ResultMap("OptsMapper")
     Opts checkUserId(Integer userId);
+
+    @Select("""
+        delete from opts_tb where user_id = #{userId};
+    """)
+    @ResultMap("OptsMapper")
+    Opts deleteOptCode(Integer userId);
 }

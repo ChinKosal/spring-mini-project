@@ -123,9 +123,31 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).body("Email Register Successfully.");
     }
 
+    @PutMapping("resend")
+    public ResponseEntity<?> resendOpts(@RequestParam String email) {
+        appUserService.resendOtpCheckMail(email);
+        optsService.deleteOptCode(email);
+        int randomNumber = (int) (Math.random() * 1000000);
+        String formattedNumber = String.format("%06d", randomNumber);
+        try {
+            emailingService.sendMail(email,"Verify", formattedNumber);
+        } catch (MessagingException e) {
+            System.out.println("Error sending email: " + e.getMessage());
+        }
+        AppUser userId = appUserRepository.findByEmail(email);
+        optsService.insertOpt(formattedNumber, false, userId.getId());
+
+        return ResponseEntity.status(HttpStatus.OK).body("New Otp has been send");
+    }
+
     @PutMapping("forget")
     public ResponseEntity<?> forgetPassword(@RequestParam String email, @RequestBody AppUserRequestPassword appUserRequestPassword) {
-        
-        return ResponseEntity.status(HttpStatus.OK).body("Password has been Changed");
+        if(!appUserRequestPassword.getPassword().equals(appUserRequestPassword.getConfirmPassword())){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Passwords do not match");
+        }
+        String encryptedPassword = passwordEncoder.encode(appUserRequestPassword.getPassword());
+        appUserRequestPassword.setPassword(encryptedPassword);
+        appUserService.changePassword(encryptedPassword,email);
+        return ResponseEntity.status(HttpStatus.OK).body("Password has been update Successfully");
     }
 }

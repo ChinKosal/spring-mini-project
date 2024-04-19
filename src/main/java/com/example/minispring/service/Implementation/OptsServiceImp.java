@@ -7,15 +7,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.example.minispring.controller.AuthController;
+import com.example.minispring.model.AppUser;
 import com.example.minispring.model.Opts;
+import com.example.minispring.repository.AppUserRepository;
 import com.example.minispring.repository.OptsRepository;
 import com.example.minispring.service.OptsService;
 @Service
 public class OptsServiceImp implements OptsService {
     private OptsRepository optsRepository;
+    private AppUserRepository appUserRepository;
 
-    public OptsServiceImp(OptsRepository optsRepository) {
+    public OptsServiceImp(OptsRepository optsRepository,AppUserRepository appUserRepository) {
         this.optsRepository = optsRepository;
+        this.appUserRepository = appUserRepository;
     }
     @Override
     public void insertOpt(String optCode, Boolean verify, Integer userId) {
@@ -37,5 +42,12 @@ public class OptsServiceImp implements OptsService {
             optsRepository.confirmVerifyOptCode(optCode);
         }
         return ResponseEntity.status(HttpStatus.OK).body("");
+    }
+
+    @Override
+    public Opts deleteOptCode(String email){
+        AppUser userId = appUserRepository.findByEmail(email);
+        Opts opt = optsRepository.deleteOptCode(userId.getId());
+        return opt;
     }
 }

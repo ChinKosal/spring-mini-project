@@ -9,4 +9,5 @@ import com.example.minispring.model.Opts;
 public interface OptsService {
     void insertOpt(String optCode, Boolean verify, Integer userId);
     ResponseEntity<?> confirmOptCode(String optCode);
+    Opts deleteOptCode(String email);
 }
