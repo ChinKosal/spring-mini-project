@@ -31,7 +31,7 @@ public class FileController {
         String fileName = fileService.saveFile(file);
         FileResponse fileResponse = new FileResponse(fileName,file.getContentType(), file.getSize());
         ApiResponse<FileResponse> response = (ApiResponse.<FileResponse>builder()
-                    .message(fileResponse.getFileName().equals("Upload Failed")? "Upload Fail" :"successfully uploaded file")
+                    .message(fileResponse.getFileName().equals("Upload Failed")? "Upload Fail only allow gif,jpg,png,jpeg" :"successfully uploaded file")
                     .payload(fileResponse)
                     .httpStatus(HttpStatus.OK)
                     .localDateTime(LocalDateTime.now()).build());
