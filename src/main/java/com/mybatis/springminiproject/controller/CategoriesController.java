@@ -44,6 +44,7 @@ public class CategoriesController {
     }
 
     @PostMapping
+
     public ResponseEntity<?> insertCategory(@RequestBody @Valid CategoriesRequest categoriesRequest) {
         ApiResponse<Categories> response = ApiResponse.<Categories>builder()
                 .message("Insert category successfully")

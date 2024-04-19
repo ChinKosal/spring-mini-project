@@ -8,7 +8,7 @@ drop Table users_tb;
 
 create table users_tb(
                          user_id SERIAL PRIMARY KEY,
-                         email VARCHAR(255),
+                         email VARCHAR(255) UNIQUE ,
                          password VARCHAR(255),
                          profile_image VARCHAR(255)
 );

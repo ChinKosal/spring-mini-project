@@ -1,22 +1,33 @@
 package com.mybatis.springminiproject.repository;
 import com.mybatis.springminiproject.model.AppUser;
 import com.mybatis.springminiproject.model.Users;
-import com.mybatis.springminiproject.model.dto.request.UserRequest;
+import com.mybatis.springminiproject.model.dto.request.AppUserRequest;
+import com.mybatis.springminiproject.model.dto.response.UserResponse;
 import org.apache.ibatis.annotations.*;
-import org.springframework.security.core.userdetails.User;
 
 @Mapper
 public interface AppUserRepository {
     @Select("""
            SELECT * FROM users_tb WHERE email = #{email}
            """)
-    @Results(id = "userMap", value = {
-            @Result(property = "id", column = "id"),
+    @Results(id = "UserMap", value = {
+            @Result(property = "id", column = "user_id"),
+            @Result(property = "email", column = "email"),
+            @Result(property = "image", column = "profile_image")
     })
     AppUser findByEmail(String email);
+    @Results(id = "UserResponseMap", value = {
+            @Result(property = "userId", column = "user_id"),
+            @Result(property = "email", column = "email"),
+            @Result(property = "profileImage", column = "profile_image")
+    })
+    @Select("""
+        select * from users_tb where user_id = #{userId}                
+""")
+    UserResponse findUserById(Integer userId);
 
     @Select("""
-        INSERT INTO users_tb (email, password, profile_image) VALUES (#{users.email} , #{users.password} , #{users.profileImage}) RETURNING *;
+        insert into users_tb(email,password,profile_image) values (#{user.email}, #{user.password}, #{user.profileImage})
     """)
-    Users register(@Param("users") UserRequest userRequest);
+    Users register(@Param("user") AppUserRequest userRequest);
 }
